@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-import logo from '../assets/logo.svg';
+import { Switch, Route, Redirect } from 'react-router-dom';
+
+import Setup from './Setup';
+import Play from './Play';
+import Header from './Header';
+
 import '../styles/App.css';
 
 class App extends Component {
     render() {
         return (
             <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <p>
-                        Edit <code>src/App.js</code> and save to reload.
-                    </p>
-                    <a
-                        className="App-link"
-                        href="https://reactjs.org"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Learn React
-                    </a>
-                </header>
+                <Header />
+                <main>
+                    <Switch>
+                        <Route exact path='/' render={() => <Redirect to='/setup' />} />
+                        <Route exact path="/setup" component={Setup} />
+                        <Route exact path="/play" component={Play} />
+                    </Switch>
+                </main>
             </div>
         );
     }
