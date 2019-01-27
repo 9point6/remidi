@@ -17,8 +17,8 @@ class Header extends Component {
                     <Link to="/setup">
                         Setup
                     </Link>
-                    <Link to="/play">
-                        Play
+                    <Link to="/control">
+                        Control
                     </Link>
                 </nav>
             </header>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Setup from './Setup';
-import Play from './Play';
+import Control from './Control';
 import Header from './Header';
 
 import '../styles/App.css';
@@ -16,7 +16,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path='/' render={() => <Redirect to='/setup' />} />
                         <Route exact path="/setup" component={Setup} />
-                        <Route exact path="/play" component={Play} />
+                        <Route exact path="/control" component={Control} />
                     </Switch>
                 </main>
             </div>

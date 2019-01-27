@@ -1319,7 +1319,17 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-cache@1.1.25:
+apollo-cache-inmemory@^1.4.2:
+  version "1.4.2"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/apollo-cache-inmemory/-/apollo-cache-inmemory-1.4.2.tgz#c91aeb4adff45cdc7872d603cbff055fa9cd5021"
+  integrity sha512-fDVmj5j1e3W+inyuSwjIcMgbQ4edcFgmiKTBMFAEKAq0jg33X7FrbDX8JT2t5Vuf75Mva50JDlt5wXdu7C6WuA==
+  dependencies:
+    apollo-cache "^1.1.25"
+    apollo-utilities "^1.1.2"
+    optimism "^0.6.9"
+    tslib "^1.9.3"
+
+apollo-cache@1.1.25, apollo-cache@^1.1.25:
   version "1.1.25"
   resolved "https://npm.morph.int.tools.bbc.co.uk/apollo-cache/-/apollo-cache-1.1.25.tgz#87a15a2a19993bb07234ccee6839b59d6fb49ac5"
   integrity sha512-9HhI/tVEHAeGaJJvi1Vpf6PzXUCA0PqNbigi2G3uOc180JjxbcaBvEbKXMEDb/UyTXkFWzI4PiPDuDQFqmIMSA==
@@ -1348,6 +1358,14 @@ apollo-link-dedup@^1.0.0:
   dependencies:
     apollo-link "^1.2.6"
 
+apollo-link-state@^0.4.2:
+  version "0.4.2"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/apollo-link-state/-/apollo-link-state-0.4.2.tgz#ac00e9be9b0ca89eae0be6ba31fe904b80bbe2e8"
+  integrity sha512-xMPcAfuiPVYXaLwC6oJFIZrKgV3GmdO31Ag2eufRoXpvT0AfJZjdaPB4450Nu9TslHRePN9A3quxNueILlQxlw==
+  dependencies:
+    apollo-utilities "^1.0.8"
+    graphql-anywhere "^4.1.0-alpha.0"
+
 apollo-link@^1.0.0, apollo-link@^1.2.6:
   version "1.2.6"
   resolved "https://npm.morph.int.tools.bbc.co.uk/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
@@ -1356,7 +1374,7 @@ apollo-link@^1.0.0, apollo-link@^1.2.6:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.13"
 
-apollo-utilities@1.1.2, apollo-utilities@^1.0.0, apollo-utilities@^1.1.2:
+apollo-utilities@1.1.2, apollo-utilities@^1.0.0, apollo-utilities@^1.0.8, apollo-utilities@^1.1.2:
   version "1.1.2"
   resolved "https://npm.morph.int.tools.bbc.co.uk/apollo-utilities/-/apollo-utilities-1.1.2.tgz#aa5eca9d1f1eb721c381a22e0dde03559d856db3"
   integrity sha512-EjDx8vToK+zkWIxc76ZQY/irRX52puNg04xf/w8R0kVTDAgHuVfnFVC01O5vE25kFnIaa5em0pFI0p9b6YMkhQ==
@@ -4617,6 +4635,19 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
 
+graphql-anywhere@^4.1.0-alpha.0:
+  version "4.1.27"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/graphql-anywhere/-/graphql-anywhere-4.1.27.tgz#7d013b4c51039ea6c46839a53abe924f8fffd4f3"
+  integrity sha512-ErASfs9siEMrmroHU0V4heh6cIdA8K/SoYpahJFgEM6YDAwUZuycTAKIrMaK8XJI37sHZWcujF/ySuYnIkP5vw==
+  dependencies:
+    apollo-utilities "^1.1.2"
+    tslib "^1.9.3"
+
+graphql-tag@^2.10.1:
+  version "2.10.1"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/graphql-tag/-/graphql-tag-2.10.1.tgz#10aa41f1cd8fae5373eaf11f1f67260a3cad5e02"
+  integrity sha512-jApXqWBzNXQ8jYa/HLkZJaVw9jgwNqZkywa2zfFn16Iv1Zb7ELNHkJaXHR7Quvd5SIGsy6Ny7SUKATgnu05uEg==
+
 graphql@^14.1.1:
   version "14.1.1"
   resolved "https://npm.morph.int.tools.bbc.co.uk/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
@@ -5079,6 +5110,11 @@ immer@1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.7.2.tgz#a51e9723c50b27e132f6566facbec1c85fc69547"
   integrity sha512-4Urocwu9+XLDJw4Tc6ZCg7APVjjLInCFvO4TwGsAYV5zT6YYSor14dsZR0+0tHlDIN92cFUOq+i7fC00G5vTxA==
+
+immutable-tuple@^0.4.9:
+  version "0.4.10"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/immutable-tuple/-/immutable-tuple-0.4.10.tgz#e0b1625384f514084a7a84b749a3bb26e9179929"
+  integrity sha512-45jheDbc3Kr5Cw8EtDD+4woGRUV0utIrJBZT8XH0TPZRfm8tzT0/sLGGzyyCCFqFMG5Pv5Igf3WY/arn6+8V9Q==
 
 import-cwd@^2.0.0:
   version "2.1.0"
@@ -7309,6 +7345,13 @@ opn@5.4.0, opn@^5.1.0:
   integrity sha512-YF9MNdVy/0qvJvDtunAOzFw9iasOQHpVthTCvGzxt61Il64AYSGdK+rYwld7NAfk9qJ7dt+hymBNSc9LNYS+Sw==
   dependencies:
     is-wsl "^1.1.0"
+
+optimism@^0.6.9:
+  version "0.6.9"
+  resolved "https://npm.morph.int.tools.bbc.co.uk/optimism/-/optimism-0.6.9.tgz#19258ff8b3be0cea29ac35f06bff818e026e30bb"
+  integrity sha512-xoQm2lvXbCA9Kd7SCx6y713Y7sZ6fUc5R6VYpoL5M6svKJbTuvtNopexK8sO8K4s0EOUYHuPN2+yAEsNyRggkQ==
+  dependencies:
+    immutable-tuple "^0.4.9"
 
 optimist@^0.6.1:
   version "0.6.1"

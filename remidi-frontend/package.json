@@ -4,8 +4,14 @@
   "private": true,
   "dependencies": {
     "@emotion/core": "^10.0.6",
+    "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
+    "apollo-link": "^1.2.6",
+    "apollo-link-state": "^0.4.2",
+    "bluebird": "^3.5.3",
     "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "lodash": "^4.17.11",
     "react": "^16.7.0",
     "react-apollo": "^2.4.0",
     "react-dom": "^16.7.0",
@@ -34,6 +40,26 @@
       "padded-blocks": [
         "error",
         "never"
+      ],
+      "comma-dangle": [
+        "error",
+        "never"
+      ],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          "max": 1,
+          "maxBOF": 0,
+          "maxEOF": 1
+        }
+      ],
+      "curly": [
+        "error",
+        "all"
+      ],
+      "object-curly-spacing": [
+        "error",
+        "always"
       ]
     }
   },
