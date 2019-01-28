@@ -66,16 +66,30 @@ class Control extends Component {
                     </li>
                     <li className="spacer-left">
                         <button
+                            onClick={this.handleNewSequence}
+                        >
+                            New
+                        </button>
+                    </li>
+                    <li>
+                        <button
                             onClick={this.handleSave}
                         >
                             Dump Sequence to Console
                         </button>
                     </li>
-                    <li className="">
+                    <li>
                         <button
                             onClick={this.handleLoad}
                         >
                             Load Sequence
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            onClick={this.handleRandomSequence}
+                        >
+                            Random Sequence
                         </button>
                     </li>
                 </ul>
@@ -297,6 +311,29 @@ class Control extends Component {
         } catch (ex) {
             alert('Could not parse JSON');
         }
+    }
+
+    handleNewSequence = () => {
+        this.props.updateAppState({
+            variables: {
+                sequencer: {}
+            }
+        });
+    }
+
+    handleRandomSequence = () => {
+        const notes = generateNotes(2, 3);
+        const arr16 = (new Array(16)).fill(true);
+        const sequencer = arr16.reduce((memo, item, i) => {
+            memo[i] = [notes[Math.floor(Math.random() * notes.length)].note];
+            return memo;
+        }, {});
+
+        this.props.updateAppState({
+            variables: {
+                sequencer
+            }
+        });
     }
 }
 
