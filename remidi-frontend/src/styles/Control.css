@@ -1,3 +1,7 @@
+.spacer-left {
+    margin-left: 8px;
+}
+
 .sequencer .current {
     background: rgba(0, 0, 0, 0.1);
 }
@@ -7,11 +11,11 @@
 }
 
 .sequencer .note.black-note {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 .sequencer .note.black-note:hover {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.5x    );
 }
 
 .sequencer .note button {
@@ -78,9 +82,18 @@
     background: rgb(235, 235, 235);
 }
 
+.sequencer .note td:nth-child(4n+2).current input[type="checkbox"] {
+    background: rgb(153, 153, 153);
+}
+
 .sequencer .note td:nth-child(4n+2) input[type="checkbox"]:checked {
     background: rgb(211, 116, 0);
 }
+
+.sequencer .note td:nth-child(4n+2).current input[type="checkbox"]:checked {
+    background: rgb(177, 97, 0);
+}
+
 
 .sequencer .empty {
     text-align: right;

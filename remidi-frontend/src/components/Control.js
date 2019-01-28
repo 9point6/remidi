@@ -64,6 +64,20 @@ class Control extends Component {
                             Continue
                         </button>
                     </li>
+                    <li className="spacer-left">
+                        <button
+                            onClick={this.handleSave}
+                        >
+                            Dump Sequence to Console
+                        </button>
+                    </li>
+                    <li className="">
+                        <button
+                            onClick={this.handleLoad}
+                        >
+                            Load Sequence
+                        </button>
+                    </li>
                 </ul>
                 <label>
                     <span>
@@ -74,7 +88,7 @@ class Control extends Component {
                 <button
                     onClick={this.handleClock}
                 >
-                    {this.props.appState.sendingClock ? 'Stop Sending Clock' : 'Start Sending Clock'}
+                    {this.props.appState.sendingClock ? 'Stop Clock' : 'Send Clock'}
                 </button>
                 <label>
                     <input type="checkbox" checked={this.props.appState.linkClockToStart} onChange={this.handleLinkBpmChange} />
@@ -264,7 +278,25 @@ class Control extends Component {
                 }
             }
         });
+    }
 
+    handleSave = () => {
+        console.log('Current Sequence:', JSON.stringify(this.props.appState.sequencer));
+    }
+
+    handleLoad = () => {
+        const json = prompt('Please paste sequence JSON');
+
+        try {
+            const sequencer = JSON.parse(json);
+            this.props.updateAppState({
+                variables: {
+                    sequencer
+                }
+            });
+        } catch (ex) {
+            alert('Could not parse JSON');
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import { delay } from 'bluebird';
 const midiClocks = {};
 const stepCounts = {};
 const beatCounts = {};
+const activeNotes = {}
 let sequence = {};
 
 function midiClockFreq(bpm) {
@@ -13,10 +14,22 @@ function midiClockFreq(bpm) {
 
 export function sendNoteOn(output, note) {
     output.playNote(note);
+
+    if (!activeNotes[output.id]) {
+        activeNotes[output.id] = {};
+    }
+
+    activeNotes[output.id][note] = true;
 }
 
 export function sendNoteOff(output, note) {
     output.stopNote(note);
+
+    if (!activeNotes[output.id]) {
+        activeNotes[output.id] = {};
+    }
+
+    activeNotes[output.id][note] = false;
 }
 
 async function switchNotes(output, previousNotes = [], newNotes = []) {
@@ -26,8 +39,9 @@ async function switchNotes(output, previousNotes = [], newNotes = []) {
     console.log('Switch notes', previousNotes, newNotes, on, off);
 
     off.map((note) => sendNoteOff(output, note));
-    await delay(10);
+    await delay(5);
     on.map((note) => sendNoteOn(output, note));
+    await delay(5);
 }
 
 export function stopMidiClock(output) {
@@ -66,6 +80,15 @@ export function sendContinue(output) {
 
 export function sendStop(output) {
     output.sendStop();
+
+    const notes = Object.keys(activeNotes[output.id]);
+    if (notes) {
+        notes.map((note) => {
+            sendNoteOff(output, note);
+            delete activeNotes[output.id][note];
+        });
+    }
+
 }
 
 export function getBeat(output) {
