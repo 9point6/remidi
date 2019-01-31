@@ -48,7 +48,7 @@ class Control extends Component {
                 <h1>
                     Control
                 </h1>
-                <ul className="track-controls">
+                <ul className="sequencer-controls">
                     <li>
                         <button
                             onClick={this.handlePlayStop}
@@ -75,7 +75,7 @@ class Control extends Component {
                         <button
                             onClick={this.handleSave}
                         >
-                            Dump Sequence to Console
+                            Save Sequence
                         </button>
                     </li>
                     <li>
@@ -132,18 +132,32 @@ class Control extends Component {
 
     sequencer = () => {
         const notes = generateNotes(2, 4);
-        const arr16 = (new Array(16)).fill(true);
+        const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
 
         return (
             <table className='sequencer'>
                 <tbody>
                     <tr>
-                        <td className='empty'>{this.props.appState.beat + 1}</td>
-                        {arr16.map((_, i) => {
+                        <td className='pattern-length__cell'>
+                            <label className="pattern-length__label" htmlFor="pattern-length">
+                                steps:
+                            </label>
+                            <input
+                                type="input"
+                                value={this.props.appState.patternLength}
+                                onChange={this.handlePatternLengthChange}
+                                className="pattern-length"
+                                name="pattern-length"
+                                disabled={this.props.appState.playState === 'PLAYING'}
+                            />
+                        </td>
+                        {arrPatternLength.map((_, i) => {
                             const currentBeat = (i === this.props.appState.beat);
                             return (
-                                <td key={i} className={currentBeat ? 'beat-indicator current' : 'beat-indicator'}>
-                                    {currentBeat ? 'O' : 'X'}
+                                <td key={i}>
+                                    <span className={currentBeat ? 'beat-indicator current' : 'beat-indicator'}>
+                                        {i + 1}
+                                    </span>
                                 </td>
                             );
                         })}
@@ -161,7 +175,7 @@ class Control extends Component {
                                     {note.note}
                                 </button>
                             </td>
-                            {arr16.map((_, i) => {
+                            {arrPatternLength.map((_, i) => {
                                 const currentBeat = (i === this.props.appState.beat);
                                 return (
                                     <td key={i} className={currentBeat ? 'sequencer-cell current' : 'sequencer-cell'}>
@@ -295,11 +309,13 @@ class Control extends Component {
     }
 
     handleSave = () => {
-        console.log('Current Sequence:', JSON.stringify(this.props.appState.sequencer));
+        const output = JSON.stringify(this.props.appState.sequencer);
+
+        prompt('Please copy your pattern JSON from below', output);
     }
 
     handleLoad = () => {
-        const json = prompt('Please paste sequence JSON');
+        const json = prompt('Please paste pattern JSON below');
 
         try {
             const sequencer = JSON.parse(json);
@@ -323,8 +339,8 @@ class Control extends Component {
 
     handleRandomSequence = () => {
         const notes = generateNotes(2, 3);
-        const arr16 = (new Array(16)).fill(true);
-        const sequencer = arr16.reduce((memo, item, i) => {
+        const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
+        const sequencer = arrPatternLength.reduce((memo, item, i) => {
             memo[i] = [notes[Math.floor(Math.random() * notes.length)].note];
             return memo;
         }, {});
@@ -332,6 +348,16 @@ class Control extends Component {
         this.props.updateAppState({
             variables: {
                 sequencer
+            }
+        });
+    }
+
+    handlePatternLengthChange = (evt) => {
+        const { target: { value: patternLength } } = evt;
+
+        this.props.updateAppState({
+            variables: {
+                patternLength
             }
         });
     }

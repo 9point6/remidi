@@ -8,15 +8,19 @@ import App from './components/App';
 import { client } from './apollo';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(
-    (
-        <BrowserRouter>
-            <ApolloProvider client={client}>
-                <App />
-            </ApolloProvider>
-        </BrowserRouter>
-    ),
-    document.getElementById('root')
-);
+async function main() {
+    ReactDOM.render(
+        (
+            <BrowserRouter>
+                <ApolloProvider client={await client}>
+                    <App />
+                </ApolloProvider>
+            </BrowserRouter>
+        ),
+        document.getElementById('root')
+    );
 
-serviceWorker.register();
+    serviceWorker.register();
+}
+
+main();

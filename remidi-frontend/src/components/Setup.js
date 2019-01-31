@@ -35,6 +35,12 @@ class Setup extends Component {
 
     refreshDevices = () => {
         this.props.updateMidiDevices();
+        this.props.updateAppState({
+            variables: {
+                selectedInput: null,
+                selectedOutput: null
+            }
+        });
     }
 
     connectionListItem = (selectFunc, selected = {}) =>
@@ -75,7 +81,7 @@ class Setup extends Component {
         if (!inputs.length || !outputs.length) {
             return (
                 <div className="setup--no-devices">
-                    You don't appeat to have any MIDI devices connected. Connect a MIDI device and click refresh above.
+                    You don't appear to have any MIDI devices connected. Connect a MIDI device and click refresh above.
                 </div>
             )
         }

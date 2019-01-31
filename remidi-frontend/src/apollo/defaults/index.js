@@ -9,7 +9,8 @@ export default {
         bpm: 125,
         notes: '',
         beat: 0,
-        sequencer: ''
+        sequencer: '',
+        patternLength: 16
     },
     midiDevices: {
         __typename: 'midiDevices',

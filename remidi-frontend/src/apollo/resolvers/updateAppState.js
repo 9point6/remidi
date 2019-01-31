@@ -13,7 +13,8 @@ import {
     sendStop,
     sendContinue,
     getBeat,
-    setSequence
+    setSequence,
+    setPatternLength
 } from '../../lib/midi';
 
 function handleSendingClockChange(sendingClock, output, bpm, beatFunc) {
@@ -50,12 +51,16 @@ function handleNotesChange(output, notes, previousNotes) {
     const newOffNotes = difference(offNotes, offPreviousNotes);
 
     console.log('Notes change. New On:', newOnNotes, '; New off:', newOffNotes);
-    newOnNotes.map((note) => sendNoteOn(output, note));
-    newOffNotes.map((note) => sendNoteOff(output, note));
+    sendNoteOn(output, newOnNotes);
+    sendNoteOff(output, newOffNotes);
 }
 
 function handleSequencerChange(output, sequence) {
     setSequence(output, sequence);
+}
+
+function handlePatternLengthChange(output, patternLength) {
+    setPatternLength(patternLength);
 }
 
 const resolver = async (_, vars, { cache }) => {
@@ -68,7 +73,8 @@ const resolver = async (_, vars, { cache }) => {
         notes,
         beat,
         linkClockToStart,
-        sequencer
+        sequencer,
+        patternLength
     } = vars;
     const query = gql`
         query GetAppState {
@@ -82,6 +88,7 @@ const resolver = async (_, vars, { cache }) => {
                 beat
                 linkClockToStart
                 sequencer
+                patternLength
             }
         }
     `;
@@ -99,7 +106,8 @@ const resolver = async (_, vars, { cache }) => {
             notes: notes || appState.notes || {},
             beat: getBeat(output),
             linkClockToStart: typeof linkClockToStart !== 'undefined' ? linkClockToStart : appState.linkClockToStart,
-            sequencer: sequencer || appState.sequencer || {}
+            sequencer: sequencer || appState.sequencer || {},
+            patternLength: Number(patternLength) || appState.patternLength
         }
     };
 
@@ -150,6 +158,14 @@ const resolver = async (_, vars, { cache }) => {
         output
     ) {
         handleSequencerChange(output, sequencer);
+    }
+
+    if (
+        patternLength &&
+        patternLength !== appState.patternLength &&
+        output
+    ) {
+        handlePatternLengthChange(output, patternLength);
     }
 
     cache.writeQuery({

@@ -11,6 +11,7 @@ export const updateAppStateQuery = gql`
         $beat: Int!,
         $linkClockToStart: Boolean!,
         $sequencer: Str! # Actually an object
+        $patternLength: Int!
     ) {
         updateAppState(
             selectedInput: $selectedInput,
@@ -20,8 +21,9 @@ export const updateAppStateQuery = gql`
             bpm: $bpm,
             notes: $notes,
             beat: $beat,
-            linkClockToStart: $linkClockToStart
-            sequencer: $sequencer
+            linkClockToStart: $linkClockToStart,
+            sequencer: $sequencer,
+            patternLength: $patternLength
         ) @client {
             selectedInput
             selectedOutput
@@ -32,6 +34,7 @@ export const updateAppStateQuery = gql`
             beat
             linkClockToStart
             sequencer
+            patternLength
         }
     }
 `;
