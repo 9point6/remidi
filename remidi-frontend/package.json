@@ -19,6 +19,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.3",
+    "teoria": "^2.5.0",
     "webmidi": "^2.3.1"
   },
   "scripts": {
