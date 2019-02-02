@@ -11,7 +11,8 @@ import {
     sendContinue,
     getBeat,
     setSequence,
-    setPatternLength
+    setPatternLength,
+    setBeat
 } from '../../lib/midi';
 
 function handleSendingClockChange(sendingClock, output, bpm, beatFunc) {
@@ -38,6 +39,10 @@ function handleBpmChange(sendingClock, output, bpm) {
     }
 }
 
+function handleBeatChange(beat, output) {
+    setBeat(output, beat);
+}
+
 function handleNotesChange(output, notes, previousNotes) {
     const onNotes = Object.keys(notes).filter((note) => notes[note]);
     const onPreviousNotes = Object.keys(previousNotes).filter((note) => previousNotes[note]);
@@ -47,7 +52,6 @@ function handleNotesChange(output, notes, previousNotes) {
     const offPreviousNotes = difference(Object.keys(previousNotes), onPreviousNotes);
     const newOffNotes = difference(offNotes, offPreviousNotes);
 
-    console.log('Notes change. New On:', newOnNotes, '; New off:', newOffNotes);
     sendNoteOn(output, newOnNotes);
     sendNoteOff(output, newOffNotes);
 }
@@ -92,6 +96,7 @@ const resolver = async (_, vars, { cache }) => {
 
     const { appState } = cache.readQuery({ query });
     const output = selectedOutput || appState.selectedOutput;
+    const midiBeat = getBeat(output);
     const data = {
         appState: {
             ...appState,
@@ -99,14 +104,18 @@ const resolver = async (_, vars, { cache }) => {
             selectedOutput: output,
             playState: playState || appState.playState,
             sendingClock: typeof sendingClock !== 'undefined' ? sendingClock : appState.sendingClock,
-            bpm: bpm || appState.bpm,
+            bpm: typeof bpm !== 'undefined' ? bpm : appState.bpm,
             notes: notes || appState.notes || {},
-            beat: getBeat(output),
+            beat: typeof beat !== 'undefined' ? beat : (typeof midiBeat !== 'undefined' ? midiBeat : appState.beat),
             linkClockToStart: typeof linkClockToStart !== 'undefined' ? linkClockToStart : appState.linkClockToStart,
             sequencer: sequencer || appState.sequencer || {},
-            patternLength: Number(patternLength) || appState.patternLength
+            patternLength: typeof patternLength !== 'undefined' ? Number(patternLength) : appState.patternLength
         }
     };
+
+    if (data.appState.beat !== midiBeat && output) {
+        handleBeatChange(output, data.appState.beat);
+    }
 
     const playStateChanged = (
         playState &&
@@ -134,7 +143,7 @@ const resolver = async (_, vars, { cache }) => {
     }
 
     if (
-        bpm &&
+        typeof bpm !== 'undefined' &&
         bpm !== appState.bpm &&
         output
     ) {
@@ -158,7 +167,7 @@ const resolver = async (_, vars, { cache }) => {
     }
 
     if (
-        patternLength &&
+        typeof patternLength !== 'undefined' &&
         patternLength !== appState.patternLength &&
         output
     ) {

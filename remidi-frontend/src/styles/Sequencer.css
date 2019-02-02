@@ -54,11 +54,21 @@
     box-sizing: border-box;
     font-size: .7em;
     line-height: 1.6em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sequencer .beat-indicator:hover {
+    color: greenyellow;
 }
 
 .sequencer .beat-indicator.current {
     background-color: greenyellow;
     border: 1px solid darkslategray;
+}
+
+.sequencer .beat-indicator.current:hover {
+    color: rgb(152, 173, 145);
 }
 
 .sequencer input[type="checkbox"] {

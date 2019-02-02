@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
 import queryString from 'query-string';
 
-import { generateNotes } from '../lib/notes';
+import {
+    generateNotes,
+    isValidTonic
+} from '../lib/notes';
 import Sequencer from './Sequencer';
 import {
     getAppStateQuery,
@@ -197,7 +200,29 @@ class Control extends Component {
     }
 
     handleRandomSequence = () => {
-        const notes = generateNotes(2, 3);
+        const noteRegex = /^[a-gA-G][b#]?-?[0-9]$/;
+        const startNote = prompt('Enter start note (e.g. C3, f#2, ab2)', 'C2');
+        if (!noteRegex.test(startNote)) {
+            return alert(`Invalid start note entered: ${startNote}`);
+        }
+
+        const endNote = prompt('Enter end note (e.g. C3, f#2, ab2)', 'C4');
+        if (!noteRegex.test(endNote)) {
+            return alert(`Invalid end note entered: ${endNote}`);
+        }
+
+        const key = prompt('Enter key note (e.g. C, f#, ab)', 'C');
+        if (!/^[a-gA-G][b#]?$/.test(key)) {
+            return alert(`Invalid key note entered: ${key}`);
+        }
+
+        const tonic = prompt('Enter key tonic (e.g. chromatic, major, minor, etc)', 'chromatic')
+            .toLowerCase();
+        if (!isValidTonic(tonic)) {
+            return alert(`Invalid key tonic entered: ${tonic}`);
+        }
+
+        const notes = generateNotes(startNote, endNote, `${key}3`, tonic);
         const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
         const sequencer = arrPatternLength.reduce((memo, item, i) => {
             memo[i] = [notes[Math.floor(Math.random() * notes.length)].note];

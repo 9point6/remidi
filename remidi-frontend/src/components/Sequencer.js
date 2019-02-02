@@ -36,9 +36,12 @@ class Sequencer extends Component {
                             const currentBeat = (i === this.props.appState.beat);
                             return (
                                 <td key={i}>
-                                    <span className={currentBeat ? 'beat-indicator current' : 'beat-indicator'}>
+                                    <button
+                                        className={currentBeat ? 'beat-indicator current' : 'beat-indicator'}
+                                        onClick={() => this.handleChangeStep(i)}
+                                    >
                                         {i + 1}
-                                    </span>
+                                    </button>
                                 </td>
                             );
                         })}
@@ -129,6 +132,14 @@ class Sequencer extends Component {
         this.props.updateAppState({
             variables: {
                 patternLength
+            }
+        });
+    }
+
+    handleChangeStep = (beat) => {
+        this.props.updateAppState({
+            variables: {
+                beat
             }
         });
     }

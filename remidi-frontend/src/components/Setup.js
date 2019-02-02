@@ -17,7 +17,6 @@ class Setup extends Component {
             this.props.updateMidiDevices();
         }
 
-        console.log('PROPS', this.props);
         return (
             <div className="Setup">
                 <h1>
@@ -83,7 +82,7 @@ class Setup extends Component {
                 <div className="setup--no-devices">
                     You don't appear to have any MIDI devices connected. Connect a MIDI device and click refresh above.
                 </div>
-            )
+            );
         }
 
         return (

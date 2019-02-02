@@ -38,8 +38,6 @@ async function switchNotes(output, previousNotes = [], newNotes = []) {
     const on = difference(newNotes, previousNotes);
     const off = difference(previousNotes, newNotes);
 
-    console.log('Switch notes', previousNotes, newNotes, on, off);
-
     sendNoteOff(output, off);
     await delay(5);
     sendNoteOn(output, on);
@@ -85,13 +83,11 @@ export function sendStop(output) {
 
     const notes = Object.keys(activeNotes[output.id]);
     if (notes.length) {
-        notes.filter((note) => note).map((note) => {
-            console.log('stopping', note);
+        notes.filter((note) => note).forEach((note) => {
             sendNoteOff(output, note);
             delete activeNotes[output.id][note];
         });
     }
-
 }
 
 export function getBeat(output) {
@@ -104,6 +100,11 @@ export function setSequence(output, newSequence) {
 
 export function setPatternLength(length = 16) {
     patternLength = Number(length);
+}
+
+export function setBeat(output, beat = 0) {
+    beatCounts[output.id] = beat;
+    stepCounts[output.id] = beat * 6;
 }
 
 export async function initMidi() {
