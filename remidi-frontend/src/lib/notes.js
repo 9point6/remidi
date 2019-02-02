@@ -28,6 +28,8 @@ export function generateOctaves(start, end, key, tonic) {
 export function generateNotes(start, end, key = 'C3', tonic = 'chromatic') {
     const lowerStart = start.toLowerCase();
     const lowerEnd = end.toLowerCase();
+    const startNotes = teoria.note(start).scale('chromatic').notes().map((note) => note.scientific().toLowerCase());
+    const endNotes = teoria.note(end).scale('chromatic').notes().map((note) => note.scientific().toLowerCase());
     const startOctave = Number(start.slice(-1));
     const endOctave = Number(end.slice(-1)) + 1;
     const notes = generateOctaves(startOctave, endOctave, key, tonic);
@@ -37,11 +39,11 @@ export function generateNotes(start, end, key = 'C3', tonic = 'chromatic') {
 
     return notes.filter(({ note }) => {
         const noteLower = note.toLowerCase();
-        if (!seenStart && noteLower === lowerStart) {
+        if (!seenStart && startNotes.indexOf(noteLower) !== -1) {
             return (seenStart = true);
         }
 
-        if (!seenEnd && noteLower === lowerEnd) {
+        if (!seenEnd && endNotes.indexOf(noteLower) !== -1) {
             return (seenEnd = true);
         }
 

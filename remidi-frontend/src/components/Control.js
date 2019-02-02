@@ -313,43 +313,28 @@ class Control extends Component {
 
     handlePlayStop = () => {
         const playState = this.props.appState.playState === 'STOPPED' ? 'PLAYING' : 'STOPPED';
-        this.props.updateAppState({
-            variables: { playState }
-        });
-
+        this.props.updateAppState({ variables: { playState } });
         this.handleRefresh();
     }
 
     handleContinue = () => {
-        this.props.updateAppState({
-            variables: { playState: 'CONTINUE' }
-        });
-
+        this.props.updateAppState({ variables: { playState: 'CONTINUE' } });
         this.handleRefresh();
     }
 
     handleClock = () => {
-        const { sendingClock } = this.props.appState;
-        this.props.updateAppState({
-            variables: {
-                sendingClock: !sendingClock
-            }
-        });
-
+        const sendingClock = !this.props.appState.sendingClock;
+        this.props.updateAppState({ variables: { sendingClock } });
         this.handleRefresh();
     }
 
-    handleBpmChange = (event) => {
-        this.props.updateAppState({
-            variables: {
-                bpm: event.target.value
-            }
-        });
+    handleBpmChange = ({ target: { value: bpm }}) => {
+        this.props.updateAppState({ variables: { bpm } });
     }
 
     handleRangeChange = (start, note, { target: { value } }) => {
-        const key = `${start ? 'start' : 'end'}Range`
-        const oldRange = this.props.appState[key]
+        const key = `${start ? 'start' : 'end'}Range`;
+        const oldRange = this.props.appState[key];
         const newNote = note ? value : oldRange.slice(0, -1);
         const newOctave = note ? oldRange.slice(-1) : value;
 
@@ -360,19 +345,11 @@ class Control extends Component {
         });
     }
 
-    handleLinkBpmChange = (event) => {
-        this.props.updateAppState({
-            variables: {
-                linkClockToStart: event.target.checked
-            }
-        });
+    handleLinkBpmChange = ({ target: { checked: linkClockToStart }}) => {
+        this.props.updateAppState({ variables: { linkClockToStart } });
     }
 
-    getSequenceJson = () => {
-        const output = JSON.stringify(this.props.appState.sequencer);
-
-        return output;
-    }
+    getSequenceJson = () => JSON.stringify(this.props.appState.sequencer)
 
     handleSave = () => {
         prompt('Please copy your pattern JSON from below', this.getSequenceJson());
@@ -394,55 +371,28 @@ class Control extends Component {
     }
 
     handleNewSequence = () => {
-        this.props.updateAppState({
-            variables: {
-                sequencer: {}
-            }
-        });
+        this.props.updateAppState({ variables: { sequencer: {} } });
     }
 
-    handleKeyChange = (event) => {
-        this.props.updateAppState({
-            variables: {
-                key: event.target.value
-            }
-        });
+    handleKeyChange = ({ target: { value: key }}) => {
+        this.props.updateAppState({ variables: { key } });
     }
 
-    handleKeyTonicChange = (event) => {
-        this.props.updateAppState({
-            variables: {
-                keyTonic: event.target.value
-            }
-        });
+    handleKeyTonicChange = ({ target: { value: keyTonic }}) => {
+        this.props.updateAppState({ variables: { keyTonic } });
     }
 
-    handleLinkKeySequencerChange = (event) => {
-        this.props.updateAppState({
-            variables: {
-                linkSequencerToKey: event.target.checked
-            }
-        });
+    handleLinkKeySequencerChange = ({ target: { checked: linkSequencerToKey }}) => {
+        this.props.updateAppState({ variables: { linkSequencerToKey } });
     }
 
     handleRandomSequence = () => {
-        const currentKeyNotes = generateNotes(
-            this.props.appState.startRange,
-            this.props.appState.endRange,
-            `${this.props.appState.key}3`,
-            this.props.appState.keyTonic
-        );
+        const { startRange, endRange, key, keyTonic, patternLength } = this.props.appState;
+        const currentKeyNotes = generateNotes(startRange, endRange, `${key}3`, keyTonic);
 
-        const notes = generateNotes(
-            startNote,
-            endNote,
-            `${this.props.appState.key}3`,
-            this.props.appState.keyTonic
-        );
-
-        const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
+        const arrPatternLength = (new Array(patternLength)).fill(true);
         const sequencer = arrPatternLength.reduce((memo, item, i) => {
-            memo[i] = [notes[Math.floor(Math.random() * notes.length)].note];
+            memo[i] = [currentKeyNotes[Math.floor(Math.random() * currentKeyNotes.length)].note];
             return memo;
         }, {});
 
