@@ -38,10 +38,10 @@ async function switchNotes(output, previousNotes = [], newNotes = []) {
     const on = difference(newNotes, previousNotes);
     const off = difference(previousNotes, newNotes);
 
-    sendNoteOff(output, off);
-    await delay(5);
     sendNoteOn(output, on);
-    await delay(5);
+    sendNoteOff(output, off);
+    // await delay(5);
+    // await delay(5);
 }
 
 export function stopMidiClock(output) {
