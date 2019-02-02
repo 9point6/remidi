@@ -15,34 +15,35 @@
     padding: 0;
 }
 
-.sequencer-controls button,
-.additional-controls button {
+.control-button {
     border: 1px solid darkslategray;
     background: darkslategray;
     color: ghostwhite;
     border-radius: 4px;
     margin-right: 4px;
     cursor: pointer;
+    font-size: 10pt;
+    text-decoration: none;
+    padding: 1px 7px;
+    display: inline-block;
+    font-weight: 300;
+    transition: background .2s ease-out;
 }
 
-.sequencer-controls button:hover,
-.additional-controls button:hover {
+.control-button:hover {
     border: 1px solid rgb(72, 119, 119);
     background: rgb(72, 119, 119);
     color: white;
 }
 
-.sequencer-controls button:active,
-.additional-controls button:active {
+.control-button:active {
     border: 1px solid rgb(29, 48, 48);
     color: rgb(189, 189, 194);
     background: rgb(29, 48, 48);
 }
 
-.sequencer-controls button:active,
-.sequencer-controls button:focus,
-.additional-controls button:active,
-.additional-controls button:focus {
+.control-button:active,
+.control-button:focus {
     color: greenyellow;
     outline: none;
 }
@@ -74,7 +75,7 @@
 select.control-field__field {
     text-align-last: right;
 }
-
+/*
 .control-field__field option {
     direction: rtl;
-}
+} */

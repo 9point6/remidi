@@ -1,6 +1,5 @@
 import WebMidi from 'webmidi';
 import { difference } from 'lodash';
-import { delay } from 'bluebird';
 
 const midiClocks = {};
 const stepCounts = {};

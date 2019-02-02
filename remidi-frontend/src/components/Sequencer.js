@@ -34,6 +34,7 @@ class Sequencer extends Component {
                                 onChange={this.handlePatternLengthChange}
                                 className="pattern-length"
                                 name="pattern-length"
+                                id="pattern-length"
                                 disabled={this.props.appState.playState === 'PLAYING'}
                             />
                         </td>

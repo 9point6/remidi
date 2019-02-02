@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import {
     generateScale,
     generateNotes,
-    isValidTonic,
     getTonics
 } from '../lib/notes';
 import Sequencer from './Sequencer';
@@ -33,6 +32,7 @@ class Control extends Component {
                 <ul className="sequencer-controls">
                     <li>
                         <button
+                            className="control-button"
                             onClick={this.handlePlayStop}
                         >
                             {this.props.appState.playState === 'STOPPED' ? 'Play' : 'Stop'}
@@ -40,6 +40,7 @@ class Control extends Component {
                     </li>
                     <li>
                         <button
+                            className="control-button"
                             onClick={this.handleContinue}
                             disabled={this.props.appState.playState !== 'STOPPED'}
                         >
@@ -47,22 +48,43 @@ class Control extends Component {
                         </button>
                     </li>
                     <li className="spacer-left">
-                        <button onClick={this.handleNewSequence}>
+                        <button
+                            className="control-button"
+                            onClick={this.handleNewSequence}
+                        >
                             New
                         </button>
                     </li>
                     <li>
-                        <button onClick={this.handleSave}>
+                        <button
+                            className="control-button"
+                            onClick={this.handleSave}
+                        >
                             Save Sequence
                         </button>
                     </li>
                     <li>
-                        <button onClick={this.handleLoad}>
+                        <a
+                            className="control-button"
+                            download="remidi-sequence.json"
+                            href={`data:application/octet-stream,${this.getSequenceJson()}`}
+                        >
+                            Download Sequence
+                        </a>
+                    </li>
+                    <li>
+                        <button
+                            className="control-button"
+                            onClick={this.handleLoad}
+                        >
                             Load Sequence
                         </button>
                     </li>
                     <li>
-                        <button onClick={this.handleRandomSequence}>
+                        <button
+                            className="control-button"
+                            onClick={this.handleRandomSequence}
+                        >
                             Random Sequence
                         </button>
                     </li>
@@ -86,6 +108,7 @@ class Control extends Component {
                     </li>
                     <li className="link-key-sequencer">
                         <input
+                            id="link-key-sequencer"
                             name="link-key-sequencer"
                             type="checkbox"
                             checked={this.props.appState.linkSequencerToKey}
@@ -110,12 +133,14 @@ class Control extends Component {
                         {<input
                             className="control-field__field"
                             type="text"
+                            id="bpm"
                             name="bpm"
                             value={this.props.appState.bpm}
                             onChange={this.handleBpmChange}
                         />}
                     </div>
                     <button
+                        className="control-button"
                         onClick={this.handleClock}
                     >
                         {this.props.appState.sendingClock ? 'Stop Clock' : 'Send Clock'}
@@ -153,14 +178,15 @@ class Control extends Component {
 
     keySelect = () => (
         <select
+            id="key"
             name="key"
             className="control-field__field"
             onChange={this.handleKeyChange}
+            value={this.props.appState.key}
         >
             {generateScale('C', 'chromatic').map((note) => (
                 <option
                     value={note}
-                    selected={note === this.props.appState.key}
                     key={note}
                 >
                     {note}
@@ -171,14 +197,15 @@ class Control extends Component {
 
     tonicSelect = () => (
         <select
+            id="key-tonic"
             name="key-tonic"
             className="control-field__field"
             onChange={this.handleKeyTonicChange}
+            value={this.props.appState.keyTonic}
         >
             {getTonics().map((tonic) => (
                 <option
                     value={tonic}
-                    selected={tonic === this.props.appState.keyTonic}
                     key={tonic}
                 >
                     {tonic}
@@ -253,10 +280,14 @@ class Control extends Component {
         });
     }
 
-    handleSave = () => {
+    getSequenceJson = () => {
         const output = JSON.stringify(this.props.appState.sequencer);
 
-        prompt('Please copy your pattern JSON from below', output);
+        return output;
+    }
+
+    handleSave = () => {
+        prompt('Please copy your pattern JSON from below', this.getSequenceJson());
     }
 
     handleLoad = () => {
