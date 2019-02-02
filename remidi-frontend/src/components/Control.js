@@ -6,7 +6,8 @@ import queryString from 'query-string';
 import {
     generateScale,
     generateNotes,
-    getTonics
+    getTonics,
+    getOctaveRange
 } from '../lib/notes';
 import Sequencer from './Sequencer';
 import {
@@ -123,6 +124,42 @@ class Control extends Component {
                     </li>
                 </ul>
                 <div className="additional-controls">
+                    <div className="start-note-range control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="range-note-start"
+                        >
+                            start
+                        </label>
+                        {this.rangeNoteSelect(true)}
+                    </div>
+                    <div className="start-octave-range control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="range-octave-start"
+                        >
+                            start
+                        </label>
+                        {this.rangeOctaveSelect(true)}
+                    </div>
+                    <div className="end-note-range control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="range-note-end"
+                        >
+                            end
+                        </label>
+                        {this.rangeNoteSelect(false)}
+                    </div>
+                    <div className="end-octave-range control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="range-octave-end"
+                        >
+                            end
+                        </label>
+                        {this.rangeOctaveSelect(false)}
+                    </div>
                     <div className="bpm control-field">
                         <label
                             className="control-field__label"
@@ -174,6 +211,44 @@ class Control extends Component {
                 </Link>
             </p>
         </div>
+    );
+
+    rangeNoteSelect = (start = true) => (
+        <select
+            id={`range-note-${start ? 'start' : 'end'}`}
+            name={`range-note-${start ? 'start' : 'end'}`}
+            className="control-field__field"
+            onChange={(evt) => this.handleRangeChange(start, true, evt)}
+            value={this.props.appState[`${start ? 'start' : 'end'}Range`].slice(0, -1)}
+        >
+            {generateScale('C', 'chromatic').map((note) => (
+                <option
+                    value={note}
+                    key={note}
+                >
+                    {note}
+                </option>
+            ))}
+        </select>
+    );
+
+    rangeOctaveSelect = (start = true) => (
+        <select
+            id={`range-octave-${start ? 'start' : 'end'}`}
+            name={`range-octave-${start ? 'start' : 'end'}`}
+            className="control-field__field"
+            onChange={(evt) => this.handleRangeChange(start, false, evt)}
+            value={this.props.appState[`${start ? 'start' : 'end'}Range`].slice(-1)}
+        >
+            {getOctaveRange().map((octave) => (
+                <option
+                    value={octave}
+                    key={octave}
+                >
+                    {octave}
+                </option>
+            ))}
+        </select>
     );
 
     keySelect = () => (
@@ -272,6 +347,19 @@ class Control extends Component {
         });
     }
 
+    handleRangeChange = (start, note, { target: { value } }) => {
+        const key = `${start ? 'start' : 'end'}Range`
+        const oldRange = this.props.appState[key]
+        const newNote = note ? value : oldRange.slice(0, -1);
+        const newOctave = note ? oldRange.slice(-1) : value;
+
+        this.props.updateAppState({
+            variables: {
+                [key]: `${newNote}${newOctave}`
+            }
+        });
+    }
+
     handleLinkBpmChange = (event) => {
         this.props.updateAppState({
             variables: {
@@ -339,30 +427,11 @@ class Control extends Component {
 
     handleRandomSequence = () => {
         const currentKeyNotes = generateNotes(
-            'F1',
-            'F5',
+            this.props.appState.startRange,
+            this.props.appState.endRange,
             `${this.props.appState.key}3`,
             this.props.appState.keyTonic
         );
-
-        const noteRegex = /^[a-gA-G][b#]?-?[0-9]$/;
-        const startNote = prompt(
-            'Enter start note (e.g. C3, f#2, ab2)',
-            currentKeyNotes[0].note
-        );
-
-        if (!noteRegex.test(startNote)) {
-            return alert(`Invalid start note entered: ${startNote}`);
-        }
-
-        const endNote = prompt(
-            'Enter end note (e.g. C3, f#2, ab2)',
-            currentKeyNotes[currentKeyNotes.length - 1].note
-        );
-
-        if (!noteRegex.test(endNote)) {
-            return alert(`Invalid end note entered: ${endNote}`);
-        }
 
         const notes = generateNotes(
             startNote,

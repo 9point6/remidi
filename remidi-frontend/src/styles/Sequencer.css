@@ -30,6 +30,7 @@
     -webkit-appearance: none;
     border-radius: 4px;
     display: block;
+    cursor: pointer;
 }
 
 .sequencer .note.black-note button {
@@ -38,8 +39,14 @@
 }
 
 .sequencer .note button:hover {
-    opacity: 0.8;
-    cursor: pointer;
+    background-color: rgb(224, 224, 231);
+    color: rgb(46, 59, 25);
+}
+
+.sequencer .note.black-note button:hover {
+    background-color: rgb(75, 122, 122);
+    border: 1px solid rgb(75, 122, 122);
+    color: greenyellow;
 }
 
 .sequencer .beat-indicator {
@@ -81,6 +88,11 @@
     margin: 0;
     transition: .2s ease-out background-color, .1s ease-out border-color;
     margin-bottom: -4px;
+    cursor: pointer;
+}
+
+.sequencer input[type="checkbox"]:hover {
+    background-color: moccasin;
 }
 
 .sequencer .current input[type="checkbox"] {
@@ -99,7 +111,8 @@
     background: rgb(235, 235, 235);
 }
 
-.sequencer .note td:nth-child(4n+2).current input[type="checkbox"] {
+.sequencer .note td:nth-child(4n+2) input[type="checkbox"]:hover {
+    background: sandybrown;
 }
 
 .sequencer .note td:nth-child(4n+2) input[type="checkbox"]:checked {

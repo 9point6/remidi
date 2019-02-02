@@ -75,7 +75,3 @@
 select.control-field__field {
     text-align-last: right;
 }
-/*
-.control-field__field option {
-    direction: rtl;
-} */

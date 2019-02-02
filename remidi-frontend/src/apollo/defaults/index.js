@@ -13,7 +13,9 @@ export default {
         patternLength: 16,
         key: 'C',
         keyTonic: 'chromatic',
-        linkSequencerToKey: false
+        linkSequencerToKey: true,
+        startRange: 'F1',
+        endRange: 'F5'
     },
     midiDevices: {
         __typename: 'midiDevices',

@@ -13,8 +13,8 @@ import '../styles/Sequencer.css';
 class Sequencer extends Component {
     render() {
         const notes = generateNotes(
-            'F1',
-            'F5',
+            this.props.appState.startRange,
+            this.props.appState.endRange,
             this.props.appState.linkSequencerToKey ? `${this.props.appState.key}3` : 'C3',
             this.props.appState.linkSequencerToKey ? this.props.appState.keyTonic : 'chromatic'
         );

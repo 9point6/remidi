@@ -78,7 +78,9 @@ const resolver = async (_, vars, { cache }) => {
         patternLength,
         key,
         keyTonic,
-        linkSequencerToKey
+        linkSequencerToKey,
+        startRange,
+        endRange
     } = vars;
     const query = gql`
         query GetAppState {
@@ -96,6 +98,8 @@ const resolver = async (_, vars, { cache }) => {
                 key
                 keyTonic
                 linkSequencerToKey
+                startRange
+                endRange
             }
         }
     `;
@@ -118,7 +122,9 @@ const resolver = async (_, vars, { cache }) => {
             patternLength: typeof patternLength !== 'undefined' ? Number(patternLength) : appState.patternLength,
             key: key || appState.key,
             keyTonic: keyTonic || appState.keyTonic,
-            linkSequencerToKey: typeof linkSequencerToKey !== 'undefined' ? linkSequencerToKey : appState.linkSequencerToKey
+            linkSequencerToKey: typeof linkSequencerToKey !== 'undefined' ? linkSequencerToKey : appState.linkSequencerToKey,
+            startRange: startRange || appState.startRange,
+            endRange: endRange || appState.endRange
         }
     };
 

@@ -1,5 +1,9 @@
 import teoria from 'teoria';
 
+export function getOctaveRange() {
+    return [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+}
+
 export function generateScale(startNote, tonic) {
     return teoria.note(startNote)
         .scale(tonic)

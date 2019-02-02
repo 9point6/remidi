@@ -14,7 +14,9 @@ export const updateAppStateQuery = gql`
         $patternLength: Int!,
         $key: Str!,
         $keyTonic: Str!,
-        $linkSequencerToKey: Boolean!
+        $linkSequencerToKey: Boolean!,
+        $startRange: Str!,
+        $endRange: Str!
     ) {
         updateAppState(
             selectedInput: $selectedInput,
@@ -29,7 +31,9 @@ export const updateAppStateQuery = gql`
             patternLength: $patternLength,
             key: $key,
             keyTonic: $keyTonic,
-            linkSequencerToKey: $linkSequencerToKey
+            linkSequencerToKey: $linkSequencerToKey,
+            startRange: $startRange,
+            endRange: $endRange
         ) @client {
             selectedInput
             selectedOutput
@@ -44,6 +48,8 @@ export const updateAppStateQuery = gql`
             key
             keyTonic
             linkSequencerToKey
+            startRange
+            endRange
         }
     }
 `;

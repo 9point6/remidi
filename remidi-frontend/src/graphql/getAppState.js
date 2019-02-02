@@ -16,6 +16,8 @@ export const getAppStateQuery = gql`
             key
             keyTonic
             linkSequencerToKey
+            startRange
+            endRange
         }
     }
 `;
