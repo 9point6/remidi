@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
+import queryString from 'query-string';
+
+import { generateNotes } from '../lib/notes';
+import Sequencer from './Sequencer';
 import {
     getAppStateQuery,
     getAppStateOptions,
@@ -8,34 +12,6 @@ import {
 } from '../graphql';
 
 import '../styles/Control.css';
-import queryString from 'query-string';
-
-const NOTES = [
-    'C',
-    'C#',
-    'D',
-    'D#',
-    'E',
-    'F',
-    'F#',
-    'G',
-    'G#',
-    'A',
-    'A#',
-    'B'
-];
-
-function generateNotes(start, end) {
-    let output = [];
-    for (let i = start; i <= end; i++) {
-        output = output.concat(NOTES.map((note) => ({
-            note: `${note}${i}`,
-            blackKey: note.indexOf('#') !== -1
-        })));
-    }
-
-    return output;
-}
 
 class Control extends Component {
     render() {
@@ -105,7 +81,7 @@ class Control extends Component {
                         </span>
                     </label>
                 </div>
-                {this.sequencer()}
+                <Sequencer />
             </div>
         );
     }
@@ -124,74 +100,6 @@ class Control extends Component {
             </p>
         </div>
     );
-
-    sequencer = () => {
-        const notes = generateNotes(2, 4);
-        const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
-
-        return (
-            <table className='sequencer'>
-                <tbody>
-                    <tr>
-                        <td className='pattern-length__cell'>
-                            <label className="pattern-length__label" htmlFor="pattern-length">
-                                steps:
-                            </label>
-                            <input
-                                type="input"
-                                value={this.props.appState.patternLength}
-                                onChange={this.handlePatternLengthChange}
-                                className="pattern-length"
-                                name="pattern-length"
-                                disabled={this.props.appState.playState === 'PLAYING'}
-                            />
-                        </td>
-                        {arrPatternLength.map((_, i) => {
-                            const currentBeat = (i === this.props.appState.beat);
-                            return (
-                                <td key={i}>
-                                    <span className={currentBeat ? 'beat-indicator current' : 'beat-indicator'}>
-                                        {i + 1}
-                                    </span>
-                                </td>
-                            );
-                        })}
-                    </tr>
-                    {notes.map((note, i) => (
-                        <tr
-                            key={i}
-                            className={`${note.note} ${note.blackKey ? 'black-note' : 'white-note'} note`}
-                        >
-                            <td className='note'>
-                                <button
-                                    onMouseDown={() => this.handleNoteDown(note)}
-                                    onMouseUp={() => this.handleNoteUp(note)}
-                                >
-                                    {note.note}
-                                </button>
-                            </td>
-                            {arrPatternLength.map((_, i) => {
-                                const currentBeat = (i === this.props.appState.beat);
-                                return (
-                                    <td key={i} className={currentBeat ? 'sequencer-cell current' : 'sequencer-cell'}>
-                                        <input
-                                            type='checkbox'
-                                            onChange={(event) => this.handleSequencerCell(note, i, event)}
-                                            checked={
-                                                (this.props.appState.sequencer[i] || [])
-                                                    .filter((item) => item === note.note)
-                                                    .length !== 0
-                                            }
-                                        />
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        );
-    }
 
     handleRefresh = () => {
         if (!this.props.appState.sendingClock) {
@@ -259,50 +167,6 @@ class Control extends Component {
         });
     }
 
-    handleNoteDown = ({ note }) => {
-        const { notes } = this.props.appState;
-        this.props.updateAppState({
-            variables: {
-                notes: {
-                    ...notes,
-                    [note]: true
-                }
-            }
-        });
-    }
-
-    handleNoteUp = ({ note }) => {
-        const { notes } = this.props.appState;
-        this.props.updateAppState({
-            variables: {
-                notes: {
-                    ...notes,
-                    [note]: false
-                }
-            }
-        });
-    }
-
-    handleSequencerCell = (note, beat, event) => {
-        const { sequencer } = this.props.appState;
-        let beatNotes;
-
-        if (event.target.checked) {
-            beatNotes = (sequencer[beat] || []).concat(note.note);
-        } else {
-            beatNotes = (sequencer[beat] || []).filter((item) => item !== note.note);
-        }
-
-        this.props.updateAppState({
-            variables: {
-                sequencer: {
-                    ...sequencer,
-                    [beat]: beatNotes
-                }
-            }
-        });
-    }
-
     handleSave = () => {
         const output = JSON.stringify(this.props.appState.sequencer);
 
@@ -343,16 +207,6 @@ class Control extends Component {
         this.props.updateAppState({
             variables: {
                 sequencer
-            }
-        });
-    }
-
-    handlePatternLengthChange = (evt) => {
-        const { target: { value: patternLength } } = evt;
-
-        this.props.updateAppState({
-            variables: {
-                patternLength
             }
         });
     }

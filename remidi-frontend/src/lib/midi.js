@@ -84,8 +84,9 @@ export function sendStop(output) {
     output.sendStop();
 
     const notes = Object.keys(activeNotes[output.id]);
-    if (notes) {
-        notes.map((note) => {
+    if (notes.length) {
+        notes.filter((note) => note).map((note) => {
+            console.log('stopping', note);
             sendNoteOff(output, note);
             delete activeNotes[output.id][note];
         });
