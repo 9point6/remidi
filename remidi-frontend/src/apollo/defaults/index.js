@@ -10,7 +10,10 @@ export default {
         notes: '',
         beat: 0,
         sequencer: '',
-        patternLength: 16
+        patternLength: 16,
+        key: 'C',
+        keyTonic: 'chromatic',
+        linkSequencerToKey: false
     },
     midiDevices: {
         __typename: 'midiDevices',

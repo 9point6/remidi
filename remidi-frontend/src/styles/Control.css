@@ -47,13 +47,13 @@
     outline: none;
 }
 
-.bpm {
+.control-field {
     position: relative;
     display: inline-block;
     margin-right: 8px;
 }
 
-.bpm label {
+.control-field__label {
     display: block;
     position: absolute;
     left: 5px;
@@ -63,9 +63,18 @@
     color: gray;
 }
 
-.bpm input {
+.control-field__field {
     text-align: right;
     border-radius: 4px 4px 0;
     border: 1px solid;
     position: relative;
+    min-width: 50px;
+}
+
+select.control-field__field {
+    text-align-last: right;
+}
+
+.control-field__field option {
+    direction: rtl;
 }

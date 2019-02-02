@@ -13,6 +13,9 @@ export const getAppStateQuery = gql`
             linkClockToStart
             sequencer
             patternLength
+            key
+            keyTonic
+            linkSequencerToKey
         }
     }
 `;

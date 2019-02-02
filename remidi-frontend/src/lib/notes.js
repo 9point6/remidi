@@ -1,13 +1,13 @@
 import teoria from 'teoria';
 
-function generateScale(startNote, tonic) {
+export function generateScale(startNote, tonic) {
     return teoria.note(startNote)
         .scale(tonic)
         .notes()
         .map((note) => note.scientific().slice(0, -1));
 }
 
-function generateOctaves(start, end, key, tonic) {
+export function generateOctaves(start, end, key, tonic) {
     const baseNotes = generateScale(key, tonic);
 
     let output = [];
@@ -38,7 +38,7 @@ export function generateNotes(start, end, key = 'C3', tonic = 'chromatic') {
         }
 
         if (!seenEnd && noteLower === lowerEnd) {
-            return !(seenEnd = true);
+            return (seenEnd = true);
         }
 
         return seenStart && !seenEnd;
@@ -47,4 +47,8 @@ export function generateNotes(start, end, key = 'C3', tonic = 'chromatic') {
 
 export function isValidTonic(tonic) {
     return teoria.Scale.KNOWN_SCALES.indexOf(tonic) !== -1;
+}
+
+export function getTonics() {
+    return teoria.Scale.KNOWN_SCALES;
 }

@@ -4,8 +4,10 @@ import { compose, graphql } from 'react-apollo';
 import queryString from 'query-string';
 
 import {
+    generateScale,
     generateNotes,
-    isValidTonic
+    isValidTonic,
+    getTonics
 } from '../lib/notes';
 import Sequencer from './Sequencer';
 import {
@@ -64,13 +66,54 @@ class Control extends Component {
                             Random Sequence
                         </button>
                     </li>
+                    <li className="key-note control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="key"
+                        >
+                            Key
+                        </label>
+                        {this.keySelect()}
+                    </li>
+                    <li className="key-tonic control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="key-tonic"
+                        >
+                            Tonic
+                        </label>
+                        {this.tonicSelect()}
+                    </li>
+                    <li className="link-key-sequencer">
+                        <input
+                            name="link-key-sequencer"
+                            type="checkbox"
+                            checked={this.props.appState.linkSequencerToKey}
+                            onChange={this.handleLinkKeySequencerChange}
+                        />
+                        <label
+                            htmlFor="link-key-sequencer"
+                        >
+                            Link Sequencer Key
+                        </label>
+
+                    </li>
                 </ul>
                 <div className="additional-controls">
-                    <div className="bpm">
-                        <label htmlFor="bpm">
+                    <div className="bpm control-field">
+                        <label
+                            className="control-field__label"
+                            htmlFor="bpm"
+                        >
                             BPM
                         </label>
-                        <input type="text" name="bpm" value={this.props.appState.bpm} onChange={this.handleBpmChange} />
+                        {<input
+                            className="control-field__field"
+                            type="text"
+                            name="bpm"
+                            value={this.props.appState.bpm}
+                            onChange={this.handleBpmChange}
+                        />}
                     </div>
                     <button
                         onClick={this.handleClock}
@@ -78,7 +121,11 @@ class Control extends Component {
                         {this.props.appState.sendingClock ? 'Stop Clock' : 'Send Clock'}
                     </button>
                     <label>
-                        <input type="checkbox" checked={this.props.appState.linkClockToStart} onChange={this.handleLinkBpmChange} />
+                        <input
+                            type="checkbox"
+                            checked={this.props.appState.linkClockToStart}
+                            onChange={this.handleLinkBpmChange}
+                        />
                         <span>
                             Link Clock to Play/Stop
                         </span>
@@ -102,6 +149,42 @@ class Control extends Component {
                 </Link>
             </p>
         </div>
+    );
+
+    keySelect = () => (
+        <select
+            name="key"
+            className="control-field__field"
+            onChange={this.handleKeyChange}
+        >
+            {generateScale('C', 'chromatic').map((note) => (
+                <option
+                    value={note}
+                    selected={note === this.props.appState.key}
+                    key={note}
+                >
+                    {note}
+                </option>
+            ))}
+        </select>
+    );
+
+    tonicSelect = () => (
+        <select
+            name="key-tonic"
+            className="control-field__field"
+            onChange={this.handleKeyTonicChange}
+        >
+            {getTonics().map((tonic) => (
+                <option
+                    value={tonic}
+                    selected={tonic === this.props.appState.keyTonic}
+                    key={tonic}
+                >
+                    {tonic}
+                </option>
+            ))}
+        </select>
     );
 
     handleRefresh = () => {
@@ -199,30 +282,64 @@ class Control extends Component {
         });
     }
 
+    handleKeyChange = (event) => {
+        this.props.updateAppState({
+            variables: {
+                key: event.target.value
+            }
+        });
+    }
+
+    handleKeyTonicChange = (event) => {
+        this.props.updateAppState({
+            variables: {
+                keyTonic: event.target.value
+            }
+        });
+    }
+
+    handleLinkKeySequencerChange = (event) => {
+        this.props.updateAppState({
+            variables: {
+                linkSequencerToKey: event.target.checked
+            }
+        });
+    }
+
     handleRandomSequence = () => {
+        const currentKeyNotes = generateNotes(
+            'F1',
+            'F5',
+            `${this.props.appState.key}3`,
+            this.props.appState.keyTonic
+        );
+
         const noteRegex = /^[a-gA-G][b#]?-?[0-9]$/;
-        const startNote = prompt('Enter start note (e.g. C3, f#2, ab2)', 'C2');
+        const startNote = prompt(
+            'Enter start note (e.g. C3, f#2, ab2)',
+            currentKeyNotes[0].note
+        );
+
         if (!noteRegex.test(startNote)) {
             return alert(`Invalid start note entered: ${startNote}`);
         }
 
-        const endNote = prompt('Enter end note (e.g. C3, f#2, ab2)', 'C4');
+        const endNote = prompt(
+            'Enter end note (e.g. C3, f#2, ab2)',
+            currentKeyNotes[currentKeyNotes.length - 1].note
+        );
+
         if (!noteRegex.test(endNote)) {
             return alert(`Invalid end note entered: ${endNote}`);
         }
 
-        const key = prompt('Enter key note (e.g. C, f#, ab)', 'C');
-        if (!/^[a-gA-G][b#]?$/.test(key)) {
-            return alert(`Invalid key note entered: ${key}`);
-        }
+        const notes = generateNotes(
+            startNote,
+            endNote,
+            `${this.props.appState.key}3`,
+            this.props.appState.keyTonic
+        );
 
-        const tonic = prompt('Enter key tonic (e.g. chromatic, major, minor, etc)', 'chromatic')
-            .toLowerCase();
-        if (!isValidTonic(tonic)) {
-            return alert(`Invalid key tonic entered: ${tonic}`);
-        }
-
-        const notes = generateNotes(startNote, endNote, `${key}3`, tonic);
         const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
         const sequencer = arrPatternLength.reduce((memo, item, i) => {
             memo[i] = [notes[Math.floor(Math.random() * notes.length)].note];

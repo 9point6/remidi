@@ -75,7 +75,10 @@ const resolver = async (_, vars, { cache }) => {
         beat,
         linkClockToStart,
         sequencer,
-        patternLength
+        patternLength,
+        key,
+        keyTonic,
+        linkSequencerToKey
     } = vars;
     const query = gql`
         query GetAppState {
@@ -90,6 +93,9 @@ const resolver = async (_, vars, { cache }) => {
                 linkClockToStart
                 sequencer
                 patternLength
+                key
+                keyTonic
+                linkSequencerToKey
             }
         }
     `;
@@ -109,7 +115,10 @@ const resolver = async (_, vars, { cache }) => {
             beat: typeof beat !== 'undefined' ? beat : (typeof midiBeat !== 'undefined' ? midiBeat : appState.beat),
             linkClockToStart: typeof linkClockToStart !== 'undefined' ? linkClockToStart : appState.linkClockToStart,
             sequencer: sequencer || appState.sequencer || {},
-            patternLength: typeof patternLength !== 'undefined' ? Number(patternLength) : appState.patternLength
+            patternLength: typeof patternLength !== 'undefined' ? Number(patternLength) : appState.patternLength,
+            key: key || appState.key,
+            keyTonic: keyTonic || appState.keyTonic,
+            linkSequencerToKey: typeof linkSequencerToKey !== 'undefined' ? linkSequencerToKey : appState.linkSequencerToKey
         }
     };
 

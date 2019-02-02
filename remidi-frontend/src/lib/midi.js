@@ -40,8 +40,6 @@ async function switchNotes(output, previousNotes = [], newNotes = []) {
 
     sendNoteOn(output, on);
     sendNoteOff(output, off);
-    // await delay(5);
-    // await delay(5);
 }
 
 export function stopMidiClock(output) {
