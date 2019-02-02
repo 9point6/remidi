@@ -12,7 +12,7 @@ import '../styles/Sequencer.css';
 
 class Sequencer extends Component {
     render() {
-        const notes = generateNotes(2, 4);
+        const notes = generateNotes('F1', 'F5');
         const arrPatternLength = (new Array(this.props.appState.patternLength)).fill(true);
 
         return (
