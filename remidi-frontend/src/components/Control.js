@@ -8,7 +8,7 @@ import {
 } from '../graphql';
 
 import '../styles/Control.css';
-import { addTypenameToDocument } from 'apollo-utilities';
+import queryString from 'query-string';
 
 const NOTES = [
     'C',
@@ -39,7 +39,8 @@ function generateNotes(start, end) {
 
 class Control extends Component {
     render() {
-        if (!this.props.appState.selectedOutput) {
+        const query = queryString.parse(this.props.location.search);
+        if (!this.props.appState.selectedOutput && !query.debug) {
             return this.notSelected();
         }
 
@@ -65,51 +66,45 @@ class Control extends Component {
                         </button>
                     </li>
                     <li className="spacer-left">
-                        <button
-                            onClick={this.handleNewSequence}
-                        >
+                        <button onClick={this.handleNewSequence}>
                             New
                         </button>
                     </li>
                     <li>
-                        <button
-                            onClick={this.handleSave}
-                        >
+                        <button onClick={this.handleSave}>
                             Save Sequence
                         </button>
                     </li>
                     <li>
-                        <button
-                            onClick={this.handleLoad}
-                        >
+                        <button onClick={this.handleLoad}>
                             Load Sequence
                         </button>
                     </li>
                     <li>
-                        <button
-                            onClick={this.handleRandomSequence}
-                        >
+                        <button onClick={this.handleRandomSequence}>
                             Random Sequence
                         </button>
                     </li>
                 </ul>
-                <label>
-                    <span>
-                        BPM
-                    </span>
-                    <input type="text" name="bpm" value={this.props.appState.bpm} onChange={this.handleBpmChange} />
-                </label>
-                <button
-                    onClick={this.handleClock}
-                >
-                    {this.props.appState.sendingClock ? 'Stop Clock' : 'Send Clock'}
-                </button>
-                <label>
-                    <input type="checkbox" checked={this.props.appState.linkClockToStart} onChange={this.handleLinkBpmChange} />
-                    <span>
-                        Link Clock to Play/Stop
-                    </span>
-                </label>
+                <div className="additional-controls">
+                    <div className="bpm">
+                        <label htmlFor="bpm">
+                            BPM
+                        </label>
+                        <input type="text" name="bpm" value={this.props.appState.bpm} onChange={this.handleBpmChange} />
+                    </div>
+                    <button
+                        onClick={this.handleClock}
+                    >
+                        {this.props.appState.sendingClock ? 'Stop Clock' : 'Send Clock'}
+                    </button>
+                    <label>
+                        <input type="checkbox" checked={this.props.appState.linkClockToStart} onChange={this.handleLinkBpmChange} />
+                        <span>
+                            Link Clock to Play/Stop
+                        </span>
+                    </label>
+                </div>
                 {this.sequencer()}
             </div>
         );

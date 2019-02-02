@@ -1,9 +1,6 @@
-import React from 'react';
 import gql from 'graphql-tag';
 import { difference } from 'lodash';
-import { Mutation } from 'react-apollo';
 
-import { updateAppStateQuery } from '../../graphql/updateAppState';
 import {
     startMidiClock,
     stopMidiClock,

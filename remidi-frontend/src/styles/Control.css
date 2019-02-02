@@ -7,14 +7,16 @@
     margin-left: 8px;
 }
 
-.sequencer-controls {
+.sequencer-controls,
+.additional-controls {
     display: flex;
     list-style: none;
     margin: 0 0 8px;
     padding: 0;
 }
 
-.sequencer-controls button {
+.sequencer-controls button,
+.additional-controls button {
     border: 1px solid darkslategray;
     background: darkslategray;
     color: ghostwhite;
@@ -23,19 +25,24 @@
     cursor: pointer;
 }
 
-.sequencer-controls button:hover {
+.sequencer-controls button:hover,
+.additional-controls button:hover {
     border: 1px solid rgb(72, 119, 119);
     background: rgb(72, 119, 119);
     color: white;
 }
 
-.sequencer-controls button:active {
+.sequencer-controls button:active,
+.additional-controls button:active {
     border: 1px solid rgb(29, 48, 48);
     color: rgb(189, 189, 194);
     background: rgb(29, 48, 48);
 }
+
 .sequencer-controls button:active,
-.sequencer-controls button:focus {
+.sequencer-controls button:focus,
+.additional-controls button:active,
+.additional-controls button:focus {
     color: greenyellow;
     outline: none;
 }
@@ -159,5 +166,28 @@
 }
 
 .sequencer .pattern-length__cell {
+    position: relative;
+}
+
+.bpm {
+    position: relative;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.bpm label {
+    display: block;
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    z-index: 10;
+    font-size: .7em;
+    color: gray;
+}
+
+.bpm input {
+    text-align: right;
+    border-radius: 4px 4px 0;
+    border: 1px solid;
     position: relative;
 }

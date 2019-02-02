@@ -1,11 +1,9 @@
 .App {
-    min-height: 90vh;
+    height: 100%;
     box-sizing: border-box;
 }
 
 .App > main {
-    background-color: #dbe2f0;
-    color: #282c34;
     height: 100%;
     padding: 4px 16px;
 }
